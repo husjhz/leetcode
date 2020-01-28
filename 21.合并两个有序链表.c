@@ -34,7 +34,40 @@
 
 
 struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2){
-
+    struct ListNode *p;
+    struct ListNode *ret;
+    struct ListNode *p1 = l1;
+    struct ListNode *p2 = l2;
+    
+    if (!l1) {
+        return l2;
+    }
+    if (!l2) {
+        return l1;
+    }
+    if (p1->val <= p2->val) {
+        p = p1;
+        p1 = p1->next;
+    }
+    else {
+        p = p2;
+        p2 = p2->next;
+    }
+    ret = p;
+    while (p1 && p2) {
+        if (p1->val <= p2->val) {
+            p->next = p1;
+            p = p1;
+            p1 = p1->next;
+        }
+        else {
+            p->next = p2;
+            p = p2;
+            p2 = p2->next;
+        }
+    }
+    p->next = p1 ? p1 : p2;
+    return ret;
 }
 
 
