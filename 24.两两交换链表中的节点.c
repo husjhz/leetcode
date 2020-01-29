@@ -46,11 +46,10 @@ struct ListNode* swapPairs(struct ListNode* head){
         return head;
     }
     newHead = head->next;
-    p = head;
     while (head && head->next) {
         p1 = head;
         p2 = head->next;
-        head = head->next->next;
+        head = p2->next;
         p->next = p2;
         p2->next = p1;
         p = p1;
