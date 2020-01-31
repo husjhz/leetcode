@@ -28,10 +28,77 @@
  */
 
 // @lc code=start
+struct stack {
+    int *array;
+    int capacity;
+    int size;
+    int top;
+};
 
+static struct stack *create(int capacity)
+{
+    struct stack *s;
+
+    s = (struct stack *)malloc(sizeof(struct stack));
+    s->array = (int *)malloc(sizeof(int) * capacity);
+    s->capacity = capacity;
+    s->size = 0;
+    s->top = 0;
+    return s;
+}
+
+static int push(struct stack *s, int x)
+{
+    if (s->size == s->capacity) {
+        return -1;
+    }
+    s->array[s->size++] = x;
+    s->top = x;
+    return s->size;
+}
+
+static int pop(struct stack *s, int *px)
+{
+    if (s->size == 0) {
+        return -1;
+    }
+    *px = s->array[--s->size];
+    if (s->size > 0) {
+        s->top = s->array[s->size - 1];
+    }
+    return s->size;
+}
+
+static inline MIN(int a, int b)
+{
+    return a < b ? a : b;
+}
 
 int trap(int* height, int heightSize){
+    struct stack *stack;
+    int i = 0;
+    int area = 0;
+    int top;
+    int distance;
+    int h;
 
+    if (height == NULL || heightSize < 2) {
+        return 0;
+    }
+    stack = create(heightSize);
+    while (i < heightSize) {
+        while (stack->size > 0 && height[i] > height[stack->top]) {
+            pop(stack, &top);
+            if (stack->size == 0) {
+                break;
+            }
+            distance = i - stack->top - 1;
+            h = MIN(height[i], height[stack->top]) - height[top];
+            area += distance * h;
+        }
+        push(stack, i++);
+    }
+    return area;
 }
 
 
