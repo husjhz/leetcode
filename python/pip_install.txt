@@ -1,0 +1,2 @@
+https://pip.pypa.io/en/stable/installing/
+https://www.jianshu.com/p/f8a3f3a07aff
