@@ -59,9 +59,47 @@
 
 // @lc code=start
 
+/*
+ * 输入: S = "babgbag", T = "bag"
+ *   0 b a b g b a g
+ * 0 1 1 1 1 1 1 1 1 
+ * b 0 1 1 2 2 3 3 3
+ * a 0 0 1 1 1 1 4 4
+ * g 0 0 0 0 1 1 1 5
+ * dp[i][j] = dp[i-1][j-1] + dp[i][j-1]
+ * dp[i][j] = dp[i][j-1]
+ */
 
 int numDistinct(char * s, char * t){
+    long **dp;
+    int m = strlen(t);
+    int n = strlen(s);
+    int i, j;
 
+    if (n < m) {
+        return 0;
+    }
+    dp = (long **)malloc(sizeof(long *) * (m + 1));
+    for (i = 0; i < m + 1; i++) {
+        dp[i] = (long *)malloc(sizeof(long) * (n + 1));
+    }
+    for (i = 1; i < m + 1; i++) {
+        dp[i][0] = 0;
+    }
+    for (j = 0; j < n + 1; j++) {
+        dp[0][j] = 1;
+    }
+    for (i = 1; i <= m; i++) {
+        for (j = 1; j <= n; j++) {
+            if (t[i - 1] == s[j - 1]) {
+                dp[i][j] = dp[i-1][j-1] + dp[i][j-1];
+            }
+            else {
+                dp[i][j] = dp[i][j-1];
+            }
+        }
+    }
+    return dp[m][n];
 }
 
 
