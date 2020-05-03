@@ -50,8 +50,78 @@
  * The sizes of the arrays are returned as *returnColumnSizes array.
  * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
  */
-char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
+char **getBoard(char **src, int n)
+{
+    char **board;
+    int i, j;
 
+    board = (char **)malloc(sizeof(char *) * n);
+    for (i = 0; i < n; i++) {
+        board[i] = (char *)malloc(sizeof(char) * (n + 1));
+        if (src) {
+            memcpy(board[i], src[i], n + 1);
+        }
+        else {
+            memset(board[i], '.', n);
+            board[i][n] = '\0';
+        }
+    } 
+    return board;  
+}
+
+int isVaild(char **board, int n, int row, int col)
+{
+    int i, j;
+
+    for (i = 0; i < row; i++) {
+        if (board[i][col] == 'Q') {
+            return 0;
+        }
+    }
+    for (i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+        if (board[i][j] == 'Q') {
+            return 0;
+        }
+    }
+    for (i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+        if (board[i][j] == 'Q') {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void backtrace(char **board, int n, int row, char ***returnArray, int *returnSize, int **returnColumnSizes)
+{
+    int col;
+
+    if (row == n) {
+        returnArray[*returnSize] = getBoard(board, n);
+        (*returnColumnSizes)[*returnSize] = n;
+        (*returnSize)++;
+        return;
+    }
+    for (col = 0; col < n; col++) {
+        if (!isVaild(board, n, row, col)) {
+            continue;
+        }
+        board[row][col] = 'Q';
+        backtrace(board, n, row + 1, returnArray, returnSize, returnColumnSizes);
+        board[row][col] = '.';
+    }
+}
+
+char *** solveNQueens(int n, int* returnSize, int** returnColumnSizes){
+    char **board;
+    char ***returnArray;
+    int k;
+
+    board = getBoard(NULL, n);
+    returnArray = (char ***)malloc(sizeof(char **) * 1000);
+    *returnColumnSizes = (int *)malloc(sizeof(int) * 1000);
+    *returnSize = 0;
+    backtrace(board, n, 0, returnArray, returnSize, returnColumnSizes);
+    return returnArray;
 }
 
 
