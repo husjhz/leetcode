@@ -46,6 +46,7 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize){
     return NULL;
 }
 
+#if 0
 int main(void)
 {
     int array[] = {19, 92, 8, 12, 19, 93, 1, 25};
@@ -57,3 +58,4 @@ int main(void)
 
     return 0;
 }
+#endif
